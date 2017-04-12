@@ -340,8 +340,7 @@
 </code></pre><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">npm install</div></pre></td></tr></table></figure>
 <h3 id="预览本地博客"><a href="#预览本地博客" class="headerlink" title="预览本地博客"></a>预览本地博客</h3><pre><code>到此为止本地博客就算搭建好了，输入如下的命令（也可以利用组合命令，快速输入hexo s -g，效果一样）。这个命令是用于调试。然后在浏览器地址栏中输入localhost:4000或者127.0.0.1:4000就可以查看本地的博客了。
 </code></pre><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">hexo g</div><div class="line">hexo s</div></pre></td></tr></table></figure>
-<p>打开后应是如下界面：</p>
-<p>![本地博客][2]</p>
+<p>打开后应是如下界面：<br>![本地博客][2]</p>
 <h3 id="远程部署博客"><a href="#远程部署博客" class="headerlink" title="远程部署博客"></a>远程部署博客</h3><h4 id="注册github账号（已有账号则跳过）"><a href="#注册github账号（已有账号则跳过）" class="headerlink" title="注册github账号（已有账号则跳过）"></a>注册github账号（已有账号则跳过）</h4><pre><code>因为是托管到Github上，所以第一步需要注册一个账号。已有账号的自行忽略。注册的过程比较简单，这里不做赘述。
 </code></pre><h4 id="建立和用户名对应的仓库"><a href="#建立和用户名对应的仓库" class="headerlink" title="建立和用户名对应的仓库"></a>建立和用户名对应的仓库</h4><pre><code>建立和用户名相对应的仓库，这是什么意思呢？以我的例子来说，我的用户名是zf01115,那么我的仓库就必须是zf101115.github.io，对，是必须，否则可能就不成功。
 </code></pre><h4 id="配置SSH公钥"><a href="#配置SSH公钥" class="headerlink" title="配置SSH公钥"></a>配置SSH公钥</h4><pre><code>　远程代码是基于SSH的，所以需要SSH的相关配置。方法是现在本地生成SSH公钥，然后添加到Github上面。具体的操作如下：
@@ -357,6 +356,7 @@
 <p>　　出现下面的提示表示部署成功<br><code>stylus
 INFO Deploy done: git</code>　　<br>　　部署好了后，在浏览器地址栏中输入你的仓库名来访问，我的是zf101115.github.io。注意一点，第一次部署的话，可能需要等待一会（一般不到10分钟就好了）才能生效，以后每次部署就可以直接访问。到这里基本的博客就搭建好了。　　</p>
 <p>在hexo目录下的_config.yml文件即为配置文件，可以再里面配置主题，标题，副标题等等。我用的是NexT主题。稍作配置，就可以写博客啦。</p>
+<p>  [1]</p>
 
           
         
