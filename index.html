@@ -367,7 +367,20 @@
 <p>LinkedList既然是一种双向链表，必然有一个存储单元，看一下LinkedList的基本存储单元，它是LinkedList中的一个内部类：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">private static class Entry&lt;E&gt; &#123;</div><div class="line">E element;</div><div class="line">Entry&lt;E&gt; next;</div><div class="line">Entry&lt;E&gt; previous;</div><div class="line">...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>看到LinkedList的Entry中的”E element”，就是它真正存储的数据。”Entry next”和”Entry previous”表示的就是这个存储单元的前一个存储单元的引用地址和后一个存储单元的引用地址。用图表示就是：</p>
-<p>| Entry previous | E element | Entry next|</p>
+<table>
+<thead>
+<tr>
+<th>Entry previous</th>
+<th>E element</th>
+<th>Entry next</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
 <p><strong>四个关注点在LinkedList上的答案</strong></p>
 <table>
 <thead>
