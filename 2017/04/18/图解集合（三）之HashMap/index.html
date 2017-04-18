@@ -94,7 +94,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/04/18/图解集合（三）之HashMap/index.html">
 <meta property="og:site_name" content="HERO | Z">
 <meta property="og:description" content="初识HashMap之前的List，讲了ArrayList、LinkedList，就两者而言，反映的是两种思想： （1）ArrayList以数组形式实现，顺序插入、查找快，插入、删除较慢 （2）LinkedList以链表形式实现，顺序插入、查找较慢，插入、删除方便 那么是否有一种数据结构能够结合上面两种的优点呢？有，答案就是HashMap。 HashMap是一种非常常见、方便和有用的集合，是一种键值">
-<meta property="og:updated_time" content="2017-04-18T13:43:04.842Z">
+<meta property="og:updated_time" content="2017-04-18T13:56:18.097Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="图解集合（三）之HashMap">
 <meta name="twitter:description" content="初识HashMap之前的List，讲了ArrayList、LinkedList，就两者而言，反映的是两种思想： （1）ArrayList以数组形式实现，顺序插入、查找快，插入、删除较慢 （2）LinkedList以链表形式实现，顺序插入、查找较慢，插入、删除方便 那么是否有一种数据结构能够结合上面两种的优点呢？有，答案就是HashMap。 HashMap是一种非常常见、方便和有用的集合，是一种键值">
@@ -359,7 +359,34 @@
 <p>（2）LinkedList以链表形式实现，顺序插入、查找较慢，插入、删除方便</p>
 <p>那么是否有一种数据结构能够结合上面两种的优点呢？有，答案就是HashMap。</p>
 <p>HashMap是一种非常常见、方便和有用的集合，是一种键值对（K-V）形式的存储结构，下面将还是用图示的方式解读HashMap的实现原理，</p>
-
+<p><strong>四个关注点在HashMap上的答案</strong></p>
+<table>
+<thead>
+<tr>
+<th>关注点</th>
+<th>结论</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HashMap是否允许为空</td>
+<td>key与values都允许为空</td>
+</tr>
+<tr>
+<td>HashMap是否允许数据重复</td>
+<td>key重复会覆盖，values允许重复</td>
+</tr>
+<tr>
+<td>HashMap是否有序</td>
+<td>无序，这个无序指的是遍历HashMap的时候，得到的元素顺序基本不可能是put的顺序</td>
+</tr>
+<tr>
+<td>HashMap是否线程安全</td>
+<td>非线程安全</td>
+</tr>
+</tbody>
+</table>
+<h4 id="添加数据"><a href="#添加数据" class="headerlink" title="添加数据"></a>添加数据</h4>
       
     </div>
 
@@ -523,7 +550,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#初识HashMap"><span class="nav-number">1.</span> <span class="nav-text">初识HashMap</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#初识HashMap"><span class="nav-number">1.</span> <span class="nav-text">初识HashMap</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#添加数据"><span class="nav-number">1.1.</span> <span class="nav-text">添加数据</span></a></li></ol></li></ol></div>
             
 
           </div>

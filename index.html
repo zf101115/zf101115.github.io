@@ -364,7 +364,34 @@
 <p>（2）LinkedList以链表形式实现，顺序插入、查找较慢，插入、删除方便</p>
 <p>那么是否有一种数据结构能够结合上面两种的优点呢？有，答案就是HashMap。</p>
 <p>HashMap是一种非常常见、方便和有用的集合，是一种键值对（K-V）形式的存储结构，下面将还是用图示的方式解读HashMap的实现原理，</p>
-
+<p><strong>四个关注点在HashMap上的答案</strong></p>
+<table>
+<thead>
+<tr>
+<th>关注点</th>
+<th>结论</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HashMap是否允许为空</td>
+<td>key与values都允许为空</td>
+</tr>
+<tr>
+<td>HashMap是否允许数据重复</td>
+<td>key重复会覆盖，values允许重复</td>
+</tr>
+<tr>
+<td>HashMap是否有序</td>
+<td>无序，这个无序指的是遍历HashMap的时候，得到的元素顺序基本不可能是put的顺序</td>
+</tr>
+<tr>
+<td>HashMap是否线程安全</td>
+<td>非线程安全</td>
+</tr>
+</tbody>
+</table>
+<h4 id="添加数据"><a href="#添加数据" class="headerlink" title="添加数据"></a>添加数据</h4>
           
         
       
