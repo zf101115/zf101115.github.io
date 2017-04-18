@@ -94,10 +94,12 @@
 <meta property="og:url" content="http://yoursite.com/2017/04/18/图解集合（一）之ArrayList/index.html">
 <meta property="og:site_name" content="HERO | Z">
 <meta property="og:description" content="这个分类中，写写Java中的集合。集合是Java中非常重要而且基础的内容，因为任何数据必不可少的就是该数据是如何存储的，集合的作用就是以一定的方式组织、存储数据。这里将会图文结合的方式剖析，更容易理解 ———-最后，要指出一点，对于集合，我认为关注的点主要有四点：1、是否允许空2、是否允许重复数据3、是否有序，有序的意思是读取数据的顺序和存放数据的顺序是否一致4、是否线程安全 ArraryList">
-<meta property="og:updated_time" content="2017-04-18T05:45:49.448Z">
+<meta property="og:image" content="http://ool03ljas.bkt.clouddn.com/kuo.jpg">
+<meta property="og:updated_time" content="2017-04-18T06:17:36.152Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="图解集合（一）之ArrayList">
 <meta name="twitter:description" content="这个分类中，写写Java中的集合。集合是Java中非常重要而且基础的内容，因为任何数据必不可少的就是该数据是如何存储的，集合的作用就是以一定的方式组织、存储数据。这里将会图文结合的方式剖析，更容易理解 ———-最后，要指出一点，对于集合，我认为关注的点主要有四点：1、是否允许空2、是否允许重复数据3、是否有序，有序的意思是读取数据的顺序和存放数据的顺序是否一致4、是否线程安全 ArraryList">
+<meta name="twitter:image" content="http://ool03ljas.bkt.clouddn.com/kuo.jpg">
 
 
 
@@ -388,6 +390,16 @@
 <p>接着看下add的源码：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">1 public boolean add(E e) &#123;</div><div class="line">2 ensureCapacity(size + 1);  // Increments modCount!!</div><div class="line">3 elementData[size++] = e;</div><div class="line">4 return true;</div><div class="line">5 &#125;</div></pre></td></tr></table></figure>
 <p>第2行的ensureCapacity方法，这个方法是扩容用的，底层实际上在调用add方法的时候只是给elementData的某个位置添加了一个数据而已</p>
+<h4 id="扩容"><a href="#扩容" class="headerlink" title="扩容"></a>扩容</h4><p>看一个ArraryList的构造方法，可见默认的大小为10</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public ArrayList() &#123;</div><div class="line">this(10);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>那么问题来了，底层数组的大小不够了怎么办？答案就是扩容，这也就是为什么一直说ArrayList的底层是基于==动态数组==实现的原因，动态数组的意思就是指底层的数组大小并不是固定的，而是根据添加的元素大小进行一个判断，不够的话就动态扩容，扩容的代码就在ensureCapacity里面：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public void ensureCapacity(int minCapacity) &#123;</div><div class="line">modCount++;</div><div class="line">int oldCapacity = elementData.length;</div><div class="line">if (minCapacity &gt; oldCapacity) &#123;</div><div class="line">    Object oldData[] = elementData;</div><div class="line">    int newCapacity = (oldCapacity * 3)/2 + 1;</div><div class="line">        if (newCapacity &lt; minCapacity)</div><div class="line">    newCapacity = minCapacity;</div><div class="line">           // minCapacity is usually close to size, so this is a win:</div><div class="line">           elementData = Arrays.copyOf(elementData, newCapacity);</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>看到扩容的时候把元素组大小先乘以3，再除以2，最后加1。可能有些人要问为什么？我们可以想：</p>
+<p>1、如果一次性扩容扩得太大，必然造成内存空间的浪费</p>
+<p>2、如果一次性扩容扩得不够，那么下一次扩容的操作必然比较快地会到来，这会降低程序运行效率，要知道扩容还是比价耗费性能的一个操作</p>
+<p>所以扩容扩多少，是JDK开发人员在时间、空间上做的一个权衡，提供出来的一个比较合理的数值。最后调用到的是Arrays的copyOf方法，将元素组里面的内容复制到新的数组里面去：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">public static &lt;T,U&gt; T[] copyOf(U[] original, int newLength, Class&lt;? extends T[]&gt; newType) &#123;</div><div class="line">       T[] copy = ((Object)newType == (Object)Object[].class)</div><div class="line">           ? (T[]) new Object[newLength]</div><div class="line">           : (T[]) Array.newInstance(newType.getComponentType(), newLength);</div><div class="line">       System.arraycopy(original, 0, copy, 0,</div><div class="line">                        Math.min(original.length, newLength));</div><div class="line">       return copy;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>用一张图来表示就是这样的：<br><img src="http://ool03ljas.bkt.clouddn.com/kuo.jpg" alt="enter description here"></p>
 
       
     </div>
@@ -556,7 +568,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#ArraryList"><span class="nav-number">1.</span> <span class="nav-text">ArraryList</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#添加元素"><span class="nav-number">1.1.</span> <span class="nav-text">添加元素</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#ArraryList"><span class="nav-number">1.</span> <span class="nav-text">ArraryList</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#添加元素"><span class="nav-number">1.1.</span> <span class="nav-text">添加元素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#扩容"><span class="nav-number">1.2.</span> <span class="nav-text">扩容</span></a></li></ol></li></ol></div>
             
 
           </div>
