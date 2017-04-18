@@ -98,7 +98,7 @@
 <meta property="og:image" content="http://ool03ljas.bkt.clouddn.com/LinkCreat2.png">
 <meta property="og:image" content="http://ool03ljas.bkt.clouddn.com/linkCreat3.png">
 <meta property="og:image" content="http://ool03ljas.bkt.clouddn.com/linkDelte.png">
-<meta property="og:updated_time" content="2017-04-18T13:23:41.261Z">
+<meta property="og:updated_time" content="2017-04-18T13:26:47.074Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="图解集合（二）之LinkedList">
 <meta name="twitter:description" content="初识LinkedList上一篇中讲解了ArrayList，本篇文章讲解一下LinkedList的实现。 LinkedList是基于链表实现的，所以先讲解一下什么是链表。链表原先是C/C++的概念，是一种线性的存储结构，意思是将要存储的数据存在一个存储单元里面，这个存储单元里面除了存放有待存储的数据以外，还存储有其下一个存储单元的地址（下一个存储单元的地址是必要的，有些存储结构还存放有其前一个存储单">
@@ -367,20 +367,7 @@
 <p>LinkedList既然是一种双向链表，必然有一个存储单元，看一下LinkedList的基本存储单元，它是LinkedList中的一个内部类：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">private static class Entry&lt;E&gt; &#123;</div><div class="line">E element;</div><div class="line">Entry&lt;E&gt; next;</div><div class="line">Entry&lt;E&gt; previous;</div><div class="line">...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>看到LinkedList的Entry中的”E element”，就是它真正存储的数据。”Entry next”和”Entry previous”表示的就是这个存储单元的前一个存储单元的引用地址和后一个存储单元的引用地址。用图表示就是：</p>
-<table>
-<thead>
-<tr>
-<th>Entry previous</th>
-<th>E element</th>
-<th>Entry next</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
+<p>| Entry previous | E element | Entry next|</p>
 <p><strong>四个关注点在LinkedList上的答案</strong></p>
 <table>
 <thead>
