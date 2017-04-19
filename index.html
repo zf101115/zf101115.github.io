@@ -260,6 +260,178 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/19/图解集合（四）之LinkedHashMap/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="HERO | Z">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HERO | Z">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/19/图解集合（四）之LinkedHashMap/" itemprop="url">
+                  图解集合（四）之LinkedHashMap
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-19T10:49:39+08:00">
+                2017-04-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java集合分析/" itemprop="url" rel="index">
+                    <span itemprop="name">Java集合分析</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="初识LinkedHashMap"><a href="#初识LinkedHashMap" class="headerlink" title="初识LinkedHashMap"></a>初识LinkedHashMap</h3><p>上两篇文章讲了HashMap和HashMap在多线程下引发的问题，说明了，HashMap是一种非常常见、非常有用的集合，并且在多线程情况下使用不当会有线程安全问题。</p>
+<p>大多数情况下，只要不涉及线程安全问题，Map基本都可以使用HashMap，不过HashMap有一个问题，就是<strong>迭代HashMap的顺序并不是HashMap放置的顺序</strong>，也就是无序。HashMap的这一缺点往往会带来困扰，因为有些场景，我们期待一个有序的Map。</p>
+<p>这个时候，LinkedHashMap就闪亮登场了，它虽然增加了时间和空间上的开销，但是<strong>通过维护一个运行于所有条目的双向链表，LinkedHashMap保证了元素迭代的顺序</strong>。、</p>
+<p>四个关注点在LinkedHashMap上的答案</p>
+<table>
+<thead>
+<tr>
+<th>关注点</th>
+<th>结论</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LinkedHashMap是否允许重复数据</td>
+<td>Key重复会覆盖、Value允许重复</td>
+</tr>
+<tr>
+<td>LinkedHashMap是否有序</td>
+<td>有序</td>
+</tr>
+<tr>
+<td>LinkedHashMap是否允许空</td>
+<td>Key和Value都允许空</td>
+</tr>
+<tr>
+<td>LinkedHashMap是否线程安全</td>
+<td>非线程安全</td>
+</tr>
+</tbody>
+</table>
+<h3 id="LinkedHashMap基本结构"><a href="#LinkedHashMap基本结构" class="headerlink" title="LinkedHashMap基本结构"></a>LinkedHashMap基本结构</h3><h3 id="初始化LinkedHashMap"><a href="#初始化LinkedHashMap" class="headerlink" title="初始化LinkedHashMap"></a>初始化LinkedHashMap</h3><h3 id="LinkedHashMap添加元素"><a href="#LinkedHashMap添加元素" class="headerlink" title="LinkedHashMap添加元素"></a>LinkedHashMap添加元素</h3><h3 id="利用LinkedHashMap实现LRU算法缓存"><a href="#利用LinkedHashMap实现LRU算法缓存" class="headerlink" title="利用LinkedHashMap实现LRU算法缓存"></a>利用LinkedHashMap实现LRU算法缓存</h3><h3 id="代码演示LinkedHashMap按照访问顺序排序的效果"><a href="#代码演示LinkedHashMap按照访问顺序排序的效果" class="headerlink" title="代码演示LinkedHashMap按照访问顺序排序的效果"></a>代码演示LinkedHashMap按照访问顺序排序的效果</h3>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/18/图解集合（三）之HashMap/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1159,7 +1331,7 @@ INFO Deploy done: git</code>　　<br>　　部署好了后，在浏览器地址
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
