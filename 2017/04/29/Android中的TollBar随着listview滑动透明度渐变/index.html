@@ -87,17 +87,17 @@
 
 
 
-<meta name="description" content="原本的bolg写在CSDN上，想到博客搬家，我擦。。。暂时没有支持github迁移，那么就手动迁移“问题解决”这个分类的过来。 ###简要现在很多应用都采用了toolBar随着listView滑动透明度变化的做法，那么，这里就讲解一种很简单的做法。toolBar就与普通的view一样。代码如下： 12345678910111213141516public void toolBarAlpha() &amp;">
+<meta name="description" content="原本的bolg写在CSDN上，想到博客搬家，我擦。。。暂时没有支持github迁移，那么就手动迁移“问题解决”这个分类的过来。 简要现在很多应用都采用了toolBar随着listView滑动透明度变化的做法，那么，这里就讲解一种很简单的做法。toolBar就与普通的view一样。代码如下： 12345678910111213141516public void toolBarAlpha() &amp;#12">
 <meta name="keywords">
 <meta property="og:type" content="article">
 <meta property="og:title" content=" Android中的TollBar随着listview滑动透明度渐变">
 <meta property="og:url" content="http://yoursite.com/2017/04/29/Android中的TollBar随着listview滑动透明度渐变/index.html">
 <meta property="og:site_name" content="HERO | Z">
-<meta property="og:description" content="原本的bolg写在CSDN上，想到博客搬家，我擦。。。暂时没有支持github迁移，那么就手动迁移“问题解决”这个分类的过来。 ###简要现在很多应用都采用了toolBar随着listView滑动透明度变化的做法，那么，这里就讲解一种很简单的做法。toolBar就与普通的view一样。代码如下： 12345678910111213141516public void toolBarAlpha() &amp;">
-<meta property="og:updated_time" content="2017-04-29T12:45:14.383Z">
+<meta property="og:description" content="原本的bolg写在CSDN上，想到博客搬家，我擦。。。暂时没有支持github迁移，那么就手动迁移“问题解决”这个分类的过来。 简要现在很多应用都采用了toolBar随着listView滑动透明度变化的做法，那么，这里就讲解一种很简单的做法。toolBar就与普通的view一样。代码如下： 12345678910111213141516public void toolBarAlpha() &amp;#12">
+<meta property="og:updated_time" content="2017-04-29T13:03:03.954Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content=" Android中的TollBar随着listview滑动透明度渐变">
-<meta name="twitter:description" content="原本的bolg写在CSDN上，想到博客搬家，我擦。。。暂时没有支持github迁移，那么就手动迁移“问题解决”这个分类的过来。 ###简要现在很多应用都采用了toolBar随着listView滑动透明度变化的做法，那么，这里就讲解一种很简单的做法。toolBar就与普通的view一样。代码如下： 12345678910111213141516public void toolBarAlpha() &amp;">
+<meta name="twitter:description" content="原本的bolg写在CSDN上，想到博客搬家，我擦。。。暂时没有支持github迁移，那么就手动迁移“问题解决”这个分类的过来。 简要现在很多应用都采用了toolBar随着listView滑动透明度变化的做法，那么，这里就讲解一种很简单的做法。toolBar就与普通的view一样。代码如下： 12345678910111213141516public void toolBarAlpha() &amp;#12">
 
 
 
@@ -355,11 +355,10 @@
 
       
         <p>原本的bolg写在CSDN上，想到博客搬家，我擦。。。暂时没有支持github迁移，那么就手动迁移“问题解决”这个分类的过来。</p>
-<p>###简要<br>现在很多应用都采用了toolBar随着listView滑动透明度变化的做法，那么，这里就讲解一种很简单的做法。toolBar就与普通的view一样。<br>代码如下：</p>
+<h3 id="简要"><a href="#简要" class="headerlink" title="简要"></a>简要</h3><p>现在很多应用都采用了toolBar随着listView滑动透明度变化的做法，那么，这里就讲解一种很简单的做法。toolBar就与普通的view一样。<br>代码如下：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">public void toolBarAlpha() &#123;  </div><div class="line">       int startOffset = 0;  </div><div class="line">       int endOffset = getActivity().getResources().getDimensionPixelOffset(R.dimen.head);  </div><div class="line">       int[] location = new int[2];  </div><div class="line">       view.getLocationOnScreen(location);  </div><div class="line">       int y = location[1] - getNotificationHigh();  </div><div class="line">       if (Math.abs(y) &lt;= startOffset) &#123;  </div><div class="line">           llTool.getBackground().mutate().setAlpha(0);  </div><div class="line">       &#125; else if (Math.abs(y) &gt; startOffset &amp;&amp; Math.abs(y) &lt; endOffset) &#123;  </div><div class="line">           float precent = (float) (Math.abs(y) - startOffset) / endOffset;  </div><div class="line">           int alpha = Math.round(precent * 255);  </div><div class="line">           llTool.getBackground().mutate().setAlpha(alpha);  </div><div class="line">       &#125; else if (Math.abs(y) &gt;= endOffset) &#123;  </div><div class="line">           llTool.getBackground().mutate().setAlpha(255);  </div><div class="line">       &#125;  </div><div class="line">   &#125;</div></pre></td></tr></table></figure>
 <p>首先在onCreat()；方法中添加llTool.getBackground().mutate().setAlpha(0)代码，这样界面渲染刚开始为全透明状态。</p>
-<p>###代码讲解</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">getNotificationHigh();</div></pre></td></tr></table></figure>
+<h3 id="代码讲解"><a href="#代码讲解" class="headerlink" title="代码讲解"></a>代码讲解</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">getNotificationHigh();</div></pre></td></tr></table></figure>
 <p>这个方法是自定义获取状态栏的方法，计算坐标时要减去状态栏的高度。</p>
 <p>R.dimen.head定义一个高度。使得toolbar在startOffset与endoffset这个高度区间内 。</p>
 <p>根据view所在坐标的变化而变化。<br>只要在listview的onScroll方法中调用就可以实现透明度渐变的效果</p>
@@ -454,8 +453,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.png"
@@ -508,6 +516,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#简要"><span class="nav-number">1.</span> <span class="nav-text">简要</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码讲解"><span class="nav-number">2.</span> <span class="nav-text">代码讲解</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
