@@ -260,6 +260,159 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/29/android在代码中获取view宽-高为0解决方法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="HERO | Z">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HERO | Z">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/29/android在代码中获取view宽-高为0解决方法/" itemprop="url">
+                   android在代码中获取view宽/高为0解决方法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-29T21:18:07+08:00">
+                2017-04-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/问题解决/" itemprop="url" rel="index">
+                    <span itemprop="name">问题解决</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在项目中，我们要在代码中获取view的宽高信息，有可能就会在onCreat或者onResume方法中去获取，原因就是view的measure过程与Activity的生命周期不是同步执行的，因此无法保证在onCreat，onResume，onStart时这个view是否已经测量完毕，如果没有测量完毕，得到的结果就是0。这里给出4种解决办法</p>
+<h4 id="onWindowFocusChanged"><a href="#onWindowFocusChanged" class="headerlink" title="onWindowFocusChanged"></a>onWindowFocusChanged</h4><p>onWindowFocusChanged含义就是view已经初始化完毕，这个时候去获取宽高就没问题了，但是要注意的是此方法会被调用很多次，当Activity的窗口失去或者得到焦点都会调用一次，也就是Activity onResume或onPause时都会调用。典型代码如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">    public void onWindowFocusChanged(boolean hasFocus) &#123;</div><div class="line">        super.onWindowFocusChanged(hasFocus);</div><div class="line">        if (hasFocus)&#123;</div><div class="line">            int width = view.getMeasuredWidth();</div><div class="line">            int height = view.getMeasuredHeight();</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h4 id="view-post-runnable"><a href="#view-post-runnable" class="headerlink" title="view.post(runnable)"></a>view.post(runnable)</h4><p>通过post将一个runnable投递到消息队列的尾部，然后等Looper调用此runnable的时候，view也就已经初始化好了，典型代码如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">    public void onStart() &#123;</div><div class="line">        super.onStart();</div><div class="line">        view.post(new Runnable)&#123;</div><div class="line">@Override</div><div class="line">public void run()&#123;</div><div class="line">        int width = view.getMeasuredWidth();</div><div class="line">        int height = view.getMeasuredHeight();</div><div class="line">        &#125;</div><div class="line">    &#125; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="viewTreeObserver"><a href="#viewTreeObserver" class="headerlink" title="viewTreeObserver"></a>viewTreeObserver</h4><p>使用viewTreeObserver的众多回调可以完成这个功能，比如使用OnGlobalLayoutListener这个接口，当view树的状态发生改变或者view树的内部view的可见性发生改变时，onGlobalLayout方法会被调用，因此这是获取view宽高很好的时机。需要注意的是，伴随着view树状态改变onGlobalLayout会被调用很多次，典型代码如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">    protected void onStart() &#123;</div><div class="line">        super.onStart();</div><div class="line">        ViewTreeObserver observer = view.getViewTreeObserver();</div><div class="line">        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() &#123;</div><div class="line">            @Override</div><div class="line">            public void onGlobalLayout() &#123;</div><div class="line">                view.getViewTreeObserver().removeGlobalOnLayoutListener(this);</div><div class="line">               int width = view.getMeasuredWidth();</div><div class="line">        int height = view.getMeasuredHeight(); </div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h4 id="view-measure-intwidthMeasureSpec-intheightMeasureSpec"><a href="#view-measure-intwidthMeasureSpec-intheightMeasureSpec" class="headerlink" title="view.measure(intwidthMeasureSpec,intheightMeasureSpec)"></a>view.measure(intwidthMeasureSpec,intheightMeasureSpec)</h4><p>通过手动对view的measure来得到view的宽高，这种方法比较复杂，要分情况处理，根据view的LayoutParams来分:<br><strong>math_parent</strong><br>无法测量，因为构造此种MeasureSpec需要知道parentSize，即父容器的剩余空间，而此时我们无法知道parentSize的大小，所以理论上测量不出view的大小。<br><strong>具体数值（dp/px）</strong><br>比如说宽高都是100px，如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">int  widthMeasureSpec=MeasureSpec.makeMeasureSpec(100,MeasureSpec.EXACTLY);</div><div class="line">int  heightMeasureSpec=MeasureSpec.makeMeasureSpec(100,MeasureSpec.EXACTLY);</div><div class="line">view.measure(widthMeasureSpec,heightMeasureSpec)；</div></pre></td></tr></table></figure>
+<p><strong>wrap_content</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">int  widthMeasureSpec=MeasureSpec.makeMeasureSpec(（1&lt;&lt;30）-1,MeasureSpec.AT_MOST);</div><div class="line">int  heightMeasureSpec=MeasureSpec.makeMeasureSpec(（1&lt;&lt;30）-1,MeasureSpec.AT_MOST);</div><div class="line">view.measure(widthMeasureSpec,heightMeasureSpec)；</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/29/Android中的TollBar随着listview滑动透明度渐变/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1481,7 +1634,7 @@ INFO Deploy done: git</code>　　<br>　　部署好了后，在浏览器地址
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

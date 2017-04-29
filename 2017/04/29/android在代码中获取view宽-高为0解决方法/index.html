@@ -87,17 +87,17 @@
 
 
 
-<meta name="description" content="原本的bolg写在CSDN上，想到博客搬家，我擦。。。暂时没有支持github迁移，那么就手动迁移“问题解决”这个分类的过来。 简要现在很多应用都采用了toolBar随着listView滑动透明度变化的做法，那么，这里就讲解一种很简单的做法。toolBar就与普通的view一样。代码如下： 12345678910111213141516public void toolBarAlpha() &amp;#12">
+<meta name="description" content="在项目中，我们要在代码中获取view的宽高信息，有可能就会在onCreat或者onResume方法中去获取，原因就是view的measure过程与Activity的生命周期不是同步执行的，因此无法保证在onCreat，onResume，onStart时这个view是否已经测量完毕，如果没有测量完毕，得到的结果就是0。这里给出4种解决办法 onWindowFocusChangedonWindowFo">
 <meta name="keywords">
 <meta property="og:type" content="article">
-<meta property="og:title" content=" Android中的TollBar随着listview滑动透明度渐变">
-<meta property="og:url" content="http://yoursite.com/2017/04/29/Android中的TollBar随着listview滑动透明度渐变/index.html">
+<meta property="og:title" content=" android在代码中获取view宽/高为0解决方法">
+<meta property="og:url" content="http://yoursite.com/2017/04/29/android在代码中获取view宽-高为0解决方法/index.html">
 <meta property="og:site_name" content="HERO | Z">
-<meta property="og:description" content="原本的bolg写在CSDN上，想到博客搬家，我擦。。。暂时没有支持github迁移，那么就手动迁移“问题解决”这个分类的过来。 简要现在很多应用都采用了toolBar随着listView滑动透明度变化的做法，那么，这里就讲解一种很简单的做法。toolBar就与普通的view一样。代码如下： 12345678910111213141516public void toolBarAlpha() &amp;#12">
-<meta property="og:updated_time" content="2017-04-29T13:03:03.954Z">
+<meta property="og:description" content="在项目中，我们要在代码中获取view的宽高信息，有可能就会在onCreat或者onResume方法中去获取，原因就是view的measure过程与Activity的生命周期不是同步执行的，因此无法保证在onCreat，onResume，onStart时这个view是否已经测量完毕，如果没有测量完毕，得到的结果就是0。这里给出4种解决办法 onWindowFocusChangedonWindowFo">
+<meta property="og:updated_time" content="2017-04-29T13:35:30.753Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content=" Android中的TollBar随着listview滑动透明度渐变">
-<meta name="twitter:description" content="原本的bolg写在CSDN上，想到博客搬家，我擦。。。暂时没有支持github迁移，那么就手动迁移“问题解决”这个分类的过来。 简要现在很多应用都采用了toolBar随着listView滑动透明度变化的做法，那么，这里就讲解一种很简单的做法。toolBar就与普通的view一样。代码如下： 12345678910111213141516public void toolBarAlpha() &amp;#12">
+<meta name="twitter:title" content=" android在代码中获取view宽/高为0解决方法">
+<meta name="twitter:description" content="在项目中，我们要在代码中获取view的宽高信息，有可能就会在onCreat或者onResume方法中去获取，原因就是view的measure过程与Activity的生命周期不是同步执行的，因此无法保证在onCreat，onResume，onStart时这个view是否已经测量完毕，如果没有测量完毕，得到的结果就是0。这里给出4种解决办法 onWindowFocusChangedonWindowFo">
 
 
 
@@ -125,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/04/29/Android中的TollBar随着listview滑动透明度渐变/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/04/29/android在代码中获取view宽-高为0解决方法/"/>
 
 
 
 
 
-  <title>  Android中的TollBar随着listview滑动透明度渐变 | HERO | Z </title>
+  <title>  android在代码中获取view宽/高为0解决方法 | HERO | Z </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -260,7 +260,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/29/Android中的TollBar随着listview滑动透明度渐变/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/29/android在代码中获取view宽-高为0解决方法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="HERO | Z">
@@ -281,7 +281,7 @@
             
             
               
-                 Android中的TollBar随着listview滑动透明度渐变
+                 android在代码中获取view宽/高为0解决方法
               
             
           </h1>
@@ -296,7 +296,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-29T20:29:45+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-29T21:18:07+08:00">
                 2017-04-29
               </time>
             
@@ -354,14 +354,17 @@
       
 
       
-        <p>原本的bolg写在CSDN上，想到博客搬家，我擦。。。暂时没有支持github迁移，那么就手动迁移“问题解决”这个分类的过来。</p>
-<h3 id="简要"><a href="#简要" class="headerlink" title="简要"></a>简要</h3><p>现在很多应用都采用了toolBar随着listView滑动透明度变化的做法，那么，这里就讲解一种很简单的做法。toolBar就与普通的view一样。<br>代码如下：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">public void toolBarAlpha() &#123;  </div><div class="line">       int startOffset = 0;  </div><div class="line">       int endOffset = getActivity().getResources().getDimensionPixelOffset(R.dimen.head);  </div><div class="line">       int[] location = new int[2];  </div><div class="line">       view.getLocationOnScreen(location);  </div><div class="line">       int y = location[1] - getNotificationHigh();  </div><div class="line">       if (Math.abs(y) &lt;= startOffset) &#123;  </div><div class="line">           llTool.getBackground().mutate().setAlpha(0);  </div><div class="line">       &#125; else if (Math.abs(y) &gt; startOffset &amp;&amp; Math.abs(y) &lt; endOffset) &#123;  </div><div class="line">           float precent = (float) (Math.abs(y) - startOffset) / endOffset;  </div><div class="line">           int alpha = Math.round(precent * 255);  </div><div class="line">           llTool.getBackground().mutate().setAlpha(alpha);  </div><div class="line">       &#125; else if (Math.abs(y) &gt;= endOffset) &#123;  </div><div class="line">           llTool.getBackground().mutate().setAlpha(255);  </div><div class="line">       &#125;  </div><div class="line">   &#125;</div></pre></td></tr></table></figure>
-<p>首先在onCreat()；方法中添加llTool.getBackground().mutate().setAlpha(0)代码，这样界面渲染刚开始为全透明状态。</p>
-<h3 id="代码讲解"><a href="#代码讲解" class="headerlink" title="代码讲解"></a>代码讲解</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">getNotificationHigh();</div></pre></td></tr></table></figure>
-<p>这个方法是自定义获取状态栏的方法，计算坐标时要减去状态栏的高度。</p>
-<p>R.dimen.head定义一个高度。使得toolbar在startOffset与endoffset这个高度区间内 。</p>
-<p>根据view所在坐标的变化而变化。<br>只要在listview的onScroll方法中调用就可以实现透明度渐变的效果</p>
+        <p>在项目中，我们要在代码中获取view的宽高信息，有可能就会在onCreat或者onResume方法中去获取，原因就是view的measure过程与Activity的生命周期不是同步执行的，因此无法保证在onCreat，onResume，onStart时这个view是否已经测量完毕，如果没有测量完毕，得到的结果就是0。这里给出4种解决办法</p>
+<h4 id="onWindowFocusChanged"><a href="#onWindowFocusChanged" class="headerlink" title="onWindowFocusChanged"></a>onWindowFocusChanged</h4><p>onWindowFocusChanged含义就是view已经初始化完毕，这个时候去获取宽高就没问题了，但是要注意的是此方法会被调用很多次，当Activity的窗口失去或者得到焦点都会调用一次，也就是Activity onResume或onPause时都会调用。典型代码如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">    public void onWindowFocusChanged(boolean hasFocus) &#123;</div><div class="line">        super.onWindowFocusChanged(hasFocus);</div><div class="line">        if (hasFocus)&#123;</div><div class="line">            int width = view.getMeasuredWidth();</div><div class="line">            int height = view.getMeasuredHeight();</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h4 id="view-post-runnable"><a href="#view-post-runnable" class="headerlink" title="view.post(runnable)"></a>view.post(runnable)</h4><p>通过post将一个runnable投递到消息队列的尾部，然后等Looper调用此runnable的时候，view也就已经初始化好了，典型代码如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">    public void onStart() &#123;</div><div class="line">        super.onStart();</div><div class="line">        view.post(new Runnable)&#123;</div><div class="line">@Override</div><div class="line">public void run()&#123;</div><div class="line">        int width = view.getMeasuredWidth();</div><div class="line">        int height = view.getMeasuredHeight();</div><div class="line">        &#125;</div><div class="line">    &#125; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="viewTreeObserver"><a href="#viewTreeObserver" class="headerlink" title="viewTreeObserver"></a>viewTreeObserver</h4><p>使用viewTreeObserver的众多回调可以完成这个功能，比如使用OnGlobalLayoutListener这个接口，当view树的状态发生改变或者view树的内部view的可见性发生改变时，onGlobalLayout方法会被调用，因此这是获取view宽高很好的时机。需要注意的是，伴随着view树状态改变onGlobalLayout会被调用很多次，典型代码如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">    protected void onStart() &#123;</div><div class="line">        super.onStart();</div><div class="line">        ViewTreeObserver observer = view.getViewTreeObserver();</div><div class="line">        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() &#123;</div><div class="line">            @Override</div><div class="line">            public void onGlobalLayout() &#123;</div><div class="line">                view.getViewTreeObserver().removeGlobalOnLayoutListener(this);</div><div class="line">               int width = view.getMeasuredWidth();</div><div class="line">        int height = view.getMeasuredHeight(); </div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h4 id="view-measure-intwidthMeasureSpec-intheightMeasureSpec"><a href="#view-measure-intwidthMeasureSpec-intheightMeasureSpec" class="headerlink" title="view.measure(intwidthMeasureSpec,intheightMeasureSpec)"></a>view.measure(intwidthMeasureSpec,intheightMeasureSpec)</h4><p>通过手动对view的measure来得到view的宽高，这种方法比较复杂，要分情况处理，根据view的LayoutParams来分:<br><strong>math_parent</strong><br>无法测量，因为构造此种MeasureSpec需要知道parentSize，即父容器的剩余空间，而此时我们无法知道parentSize的大小，所以理论上测量不出view的大小。<br><strong>具体数值（dp/px）</strong><br>比如说宽高都是100px，如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">int  widthMeasureSpec=MeasureSpec.makeMeasureSpec(100,MeasureSpec.EXACTLY);</div><div class="line">int  heightMeasureSpec=MeasureSpec.makeMeasureSpec(100,MeasureSpec.EXACTLY);</div><div class="line">view.measure(widthMeasureSpec,heightMeasureSpec)；</div></pre></td></tr></table></figure>
+<p><strong>wrap_content</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">int  widthMeasureSpec=MeasureSpec.makeMeasureSpec(（1&lt;&lt;30）-1,MeasureSpec.AT_MOST);</div><div class="line">int  heightMeasureSpec=MeasureSpec.makeMeasureSpec(（1&lt;&lt;30）-1,MeasureSpec.AT_MOST);</div><div class="line">view.measure(widthMeasureSpec,heightMeasureSpec)；</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -398,18 +401,14 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/04/29/android在代码中获取view宽-高为0解决方法/" rel="next" title=" android在代码中获取view宽/高为0解决方法">
-                <i class="fa fa-chevron-left"></i>  android在代码中获取view宽/高为0解决方法
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/04/19/图解集合（四）之LinkedHashMap/" rel="prev" title="图解集合（四）之LinkedHashMap">
-                图解集合（四）之LinkedHashMap <i class="fa fa-chevron-right"></i>
+              <a href="/2017/04/29/Android中的TollBar随着listview滑动透明度渐变/" rel="prev" title=" Android中的TollBar随着listview滑动透明度渐变">
+                 Android中的TollBar随着listview滑动透明度渐变 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -530,7 +529,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#简要"><span class="nav-number">1.</span> <span class="nav-text">简要</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码讲解"><span class="nav-number">2.</span> <span class="nav-text">代码讲解</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#onWindowFocusChanged"><span class="nav-number">1.</span> <span class="nav-text">onWindowFocusChanged</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#view-post-runnable"><span class="nav-number">2.</span> <span class="nav-text">view.post(runnable)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#viewTreeObserver"><span class="nav-number">3.</span> <span class="nav-text">viewTreeObserver</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#view-measure-intwidthMeasureSpec-intheightMeasureSpec"><span class="nav-number">4.</span> <span class="nav-text">view.measure(intwidthMeasureSpec,intheightMeasureSpec)</span></a></li></ol></div>
             
 
           </div>
