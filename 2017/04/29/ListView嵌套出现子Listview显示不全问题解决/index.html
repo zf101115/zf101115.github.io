@@ -87,17 +87,17 @@
 
 
 
-<meta name="description" content="初识LinkedHashMap上两篇文章讲了HashMap和HashMap在多线程下引发的问题，说明了，HashMap是一种非常常见、非常有用的集合，并且在多线程情况下使用不当会有线程安全问题。 大多数情况下，只要不涉及线程安全问题，Map基本都可以使用HashMap，不过HashMap有一个问题，就是迭代HashMap的顺序并不是HashMap放置的顺序，也就是无序。HashMap的这一缺点往往">
+<meta name="description" content="今天同事问我listView的item项嵌套listView出现子listView中item显示不全问题，怎么解决。也在这里记录一下，出现这个情况，我们要做的就是重新测量一下子listview。代码如下： 1234567891011ListAdapter listAdapter = listView.getAdapter(); if (listAdapter == null) return；int">
 <meta name="keywords">
 <meta property="og:type" content="article">
-<meta property="og:title" content="图解集合（四）之LinkedHashMap">
-<meta property="og:url" content="http://yoursite.com/2017/04/19/图解集合（四）之LinkedHashMap/index.html">
+<meta property="og:title" content=" ListView嵌套出现子Listview显示不全问题解决">
+<meta property="og:url" content="http://yoursite.com/2017/04/29/ListView嵌套出现子Listview显示不全问题解决/index.html">
 <meta property="og:site_name" content="HERO | Z">
-<meta property="og:description" content="初识LinkedHashMap上两篇文章讲了HashMap和HashMap在多线程下引发的问题，说明了，HashMap是一种非常常见、非常有用的集合，并且在多线程情况下使用不当会有线程安全问题。 大多数情况下，只要不涉及线程安全问题，Map基本都可以使用HashMap，不过HashMap有一个问题，就是迭代HashMap的顺序并不是HashMap放置的顺序，也就是无序。HashMap的这一缺点往往">
-<meta property="og:updated_time" content="2017-04-19T02:56:10.389Z">
+<meta property="og:description" content="今天同事问我listView的item项嵌套listView出现子listView中item显示不全问题，怎么解决。也在这里记录一下，出现这个情况，我们要做的就是重新测量一下子listview。代码如下： 1234567891011ListAdapter listAdapter = listView.getAdapter(); if (listAdapter == null) return；int">
+<meta property="og:updated_time" content="2017-04-29T14:09:49.710Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="图解集合（四）之LinkedHashMap">
-<meta name="twitter:description" content="初识LinkedHashMap上两篇文章讲了HashMap和HashMap在多线程下引发的问题，说明了，HashMap是一种非常常见、非常有用的集合，并且在多线程情况下使用不当会有线程安全问题。 大多数情况下，只要不涉及线程安全问题，Map基本都可以使用HashMap，不过HashMap有一个问题，就是迭代HashMap的顺序并不是HashMap放置的顺序，也就是无序。HashMap的这一缺点往往">
+<meta name="twitter:title" content=" ListView嵌套出现子Listview显示不全问题解决">
+<meta name="twitter:description" content="今天同事问我listView的item项嵌套listView出现子listView中item显示不全问题，怎么解决。也在这里记录一下，出现这个情况，我们要做的就是重新测量一下子listview。代码如下： 1234567891011ListAdapter listAdapter = listView.getAdapter(); if (listAdapter == null) return；int">
 
 
 
@@ -125,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/04/19/图解集合（四）之LinkedHashMap/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/04/29/ListView嵌套出现子Listview显示不全问题解决/"/>
 
 
 
 
 
-  <title> 图解集合（四）之LinkedHashMap | HERO | Z </title>
+  <title>  ListView嵌套出现子Listview显示不全问题解决 | HERO | Z </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -260,7 +260,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/19/图解集合（四）之LinkedHashMap/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/29/ListView嵌套出现子Listview显示不全问题解决/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="HERO | Z">
@@ -281,7 +281,7 @@
             
             
               
-                图解集合（四）之LinkedHashMap
+                 ListView嵌套出现子Listview显示不全问题解决
               
             
           </h1>
@@ -296,8 +296,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-19T10:49:39+08:00">
-                2017-04-19
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-29T22:08:25+08:00">
+                2017-04-29
               </time>
             
 
@@ -319,8 +319,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java集合分析/" itemprop="url" rel="index">
-                    <span itemprop="name">Java集合分析</span>
+                  <a href="/categories/问题解决/" itemprop="url" rel="index">
+                    <span itemprop="name">问题解决</span>
                   </a>
                 </span>
 
@@ -354,37 +354,10 @@
       
 
       
-        <h3 id="初识LinkedHashMap"><a href="#初识LinkedHashMap" class="headerlink" title="初识LinkedHashMap"></a>初识LinkedHashMap</h3><p>上两篇文章讲了HashMap和HashMap在多线程下引发的问题，说明了，HashMap是一种非常常见、非常有用的集合，并且在多线程情况下使用不当会有线程安全问题。</p>
-<p>大多数情况下，只要不涉及线程安全问题，Map基本都可以使用HashMap，不过HashMap有一个问题，就是<strong>迭代HashMap的顺序并不是HashMap放置的顺序</strong>，也就是无序。HashMap的这一缺点往往会带来困扰，因为有些场景，我们期待一个有序的Map。</p>
-<p>这个时候，LinkedHashMap就闪亮登场了，它虽然增加了时间和空间上的开销，但是<strong>通过维护一个运行于所有条目的双向链表，LinkedHashMap保证了元素迭代的顺序</strong>。、</p>
-<p>四个关注点在LinkedHashMap上的答案</p>
-<table>
-<thead>
-<tr>
-<th>关注点</th>
-<th>结论</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>LinkedHashMap是否允许重复数据</td>
-<td>Key重复会覆盖、Value允许重复</td>
-</tr>
-<tr>
-<td>LinkedHashMap是否有序</td>
-<td>有序</td>
-</tr>
-<tr>
-<td>LinkedHashMap是否允许空</td>
-<td>Key和Value都允许空</td>
-</tr>
-<tr>
-<td>LinkedHashMap是否线程安全</td>
-<td>非线程安全</td>
-</tr>
-</tbody>
-</table>
-<h3 id="LinkedHashMap基本结构"><a href="#LinkedHashMap基本结构" class="headerlink" title="LinkedHashMap基本结构"></a>LinkedHashMap基本结构</h3><h3 id="初始化LinkedHashMap"><a href="#初始化LinkedHashMap" class="headerlink" title="初始化LinkedHashMap"></a>初始化LinkedHashMap</h3><h3 id="LinkedHashMap添加元素"><a href="#LinkedHashMap添加元素" class="headerlink" title="LinkedHashMap添加元素"></a>LinkedHashMap添加元素</h3><h3 id="利用LinkedHashMap实现LRU算法缓存"><a href="#利用LinkedHashMap实现LRU算法缓存" class="headerlink" title="利用LinkedHashMap实现LRU算法缓存"></a>利用LinkedHashMap实现LRU算法缓存</h3><h3 id="代码演示LinkedHashMap按照访问顺序排序的效果"><a href="#代码演示LinkedHashMap按照访问顺序排序的效果" class="headerlink" title="代码演示LinkedHashMap按照访问顺序排序的效果"></a>代码演示LinkedHashMap按照访问顺序排序的效果</h3>
+        <p>今天同事问我listView的item项嵌套listView出现子listView中item显示不全问题，怎么解决。也在这里记录一下，出现这个情况，我们要做的就是重新测量一下子listview。代码如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">ListAdapter listAdapter = listView.getAdapter();</div><div class="line"> if (listAdapter == null) return；</div><div class="line">int totalHeight = 0;</div><div class="line"> for (int i = 0, len = listAdapter.getCount(); i &lt; len; i++) &#123;</div><div class="line">            View listItem = listAdapter.getView(i, null, listView);</div><div class="line">            listItem.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);</div><div class="line">            totalHeight += listItem.getMeasuredHeight();</div><div class="line">        &#125;</div><div class="line">        ViewGroup.LayoutParams params = listView.getLayoutParams();</div><div class="line">        params.height = totalHeight+ (listView.getDividerHeight() * (listAdapter.getCount() - 1));</div><div class="line">        listView.setLayoutParams(params);</div></pre></td></tr></table></figure>
+<p>OK了，重新编译运行看看吧。。。。。</p>
+
       
     </div>
 
@@ -420,18 +393,14 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/04/29/Android中的TollBar随着listview滑动透明度渐变/" rel="next" title=" Android中的TollBar随着listview滑动透明度渐变">
-                <i class="fa fa-chevron-left"></i>  Android中的TollBar随着listview滑动透明度渐变
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/04/18/图解集合（三）之HashMap/" rel="prev" title="图解集合（三）之HashMap">
-                图解集合（三）之HashMap <i class="fa fa-chevron-right"></i>
+              <a href="/2017/04/29/解决PopupWindow在android7-0弹出位置错误问题/" rel="prev" title="解决PopupWindow在android7.0弹出位置错误问题">
+                解决PopupWindow在android7.0弹出位置错误问题 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -479,17 +448,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel">
+      <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.png"
@@ -542,22 +502,6 @@
 
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#初识LinkedHashMap"><span class="nav-number">1.</span> <span class="nav-text">初识LinkedHashMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LinkedHashMap基本结构"><span class="nav-number">2.</span> <span class="nav-text">LinkedHashMap基本结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化LinkedHashMap"><span class="nav-number">3.</span> <span class="nav-text">初始化LinkedHashMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LinkedHashMap添加元素"><span class="nav-number">4.</span> <span class="nav-text">LinkedHashMap添加元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用LinkedHashMap实现LRU算法缓存"><span class="nav-number">5.</span> <span class="nav-text">利用LinkedHashMap实现LRU算法缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码演示LinkedHashMap按照访问顺序排序的效果"><span class="nav-number">6.</span> <span class="nav-text">代码演示LinkedHashMap按照访问顺序排序的效果</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
