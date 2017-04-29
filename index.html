@@ -260,6 +260,155 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/29/解决PopupWindow在android7-0弹出位置错误问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="HERO | Z">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HERO | Z">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/29/解决PopupWindow在android7-0弹出位置错误问题/" itemprop="url">
+                  解决PopupWindow在android7.0弹出位置错误问题
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-29T21:52:16+08:00">
+                2017-04-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/问题解决/" itemprop="url" rel="index">
+                    <span itemprop="name">问题解决</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>最近用了Android7.0手机打开做的项目，发现之前做的PopupWindow弹出位置都在屏幕顶部弹出，翻开代码，</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pop.showAsDropDown(viewMark);</div></pre></td></tr></table></figure>
+<p>PopupWindow在viewMark下方弹出，那就是此方法在7.0位置失效了。接着换成了另外一个方法showAtLocation；代码如下</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">int[] location = new int[2]; </div><div class="line">viewMark.getLocationOnScreen(location);</div><div class="line">int y = location[1] ;</div><div class="line">pop.showAtLocation(viewMark, Gravity.NO_GRAVITY,0,y);</div></pre></td></tr></table></figure>
+<p>showAtLocation的四个参数最重要的就是第三，第四。代表偏移量，集体参数可以自己查询。这里不多介绍。编译运行，7.0上完美解决。duang……….，用7.0以下手机运行出现了同样的问题，看样子还要分开处理。完整代码如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">if(android.os.Build.VERSION.SDK_INT&gt;android.os.Build.VERSION_CODES.M) &#123;</div><div class="line"> int[] location = new int[2];    viewMark.getLocationOnScreen(location);</div><div class="line">int y = location[1] ;</div><div class="line">pop.showAtLocation(viewMark, Gravity.NO_GRAVITY,0,y);</div><div class="line">&#125;else &#123;</div><div class="line">  pop.showAsDropDown(viewMark);</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>好了，这个问题就解决了。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/29/解决图片宽度全屏高度按比例自适应填充/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1778,7 +1927,7 @@ INFO Deploy done: git</code>　　<br>　　部署好了后，在浏览器地址
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
