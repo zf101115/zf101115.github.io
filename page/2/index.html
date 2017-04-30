@@ -260,6 +260,249 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/18/图解集合（二）之LinkedList/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="HERO | Z">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HERO | Z">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/18/图解集合（二）之LinkedList/" itemprop="url">
+                  图解集合（二）之LinkedList
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-18T11:49:22+08:00">
+                2017-04-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java集合分析/" itemprop="url" rel="index">
+                    <span itemprop="name">Java集合分析</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="初识LinkedList"><a href="#初识LinkedList" class="headerlink" title="初识LinkedList"></a>初识LinkedList</h3><p>上一篇中讲解了ArrayList，本篇文章讲解一下LinkedList的实现。</p>
+<p>LinkedList是基于<strong>链表</strong>实现的，所以先讲解一下什么是链表。链表原先是C/C++的概念，是一种线性的存储结构，意思是将要存储的数据存在一个存储单元里面，这个存储单元里面除了存放有待存储的数据以外，还存储有其下一个存储单元的地址（下一个存储单元的地址是必要的，有些存储结构还存放有其前一个存储单元的地址），每次查找数据的时候，通过某个存储单元中的下一个存储单元的地址寻找其后面的那个存储单元。</p>
+<p>这么讲可能有点抽象，先提一句，LinkedList是一种<strong>双向链表</strong>，双向链表我认为有两点含义：</p>
+<p>1、链表中任意一个存储单元都可以通过向前或者向后寻址的方式获取到其前一个存储单元和其后一个存储单元</p>
+<p>2、链表的尾节点的后一个节点是链表的头结点，链表的头结点的前一个节点是链表的尾节点</p>
+<p>LinkedList既然是一种双向链表，必然有一个存储单元，看一下LinkedList的基本存储单元，它是LinkedList中的一个内部类：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">private static class Entry&lt;E&gt; &#123;</div><div class="line">E element;</div><div class="line">Entry&lt;E&gt; next;</div><div class="line">Entry&lt;E&gt; previous;</div><div class="line">...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>看到LinkedList的Entry中的”E element”，就是它真正存储的数据。”Entry next”和”Entry previous”表示的就是这个存储单元的前一个存储单元的引用地址和后一个存储单元的引用地址。用图表示就是：</p>
+<table>
+<thead>
+<tr>
+<th>Entry previous</th>
+<th>E element</th>
+<th>Entry next</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>四个关注点在LinkedList上的答案</strong></p>
+<table>
+<thead>
+<tr>
+<th>关注点</th>
+<th>结论</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LinkedList是否可以为空</td>
+<td>允许</td>
+</tr>
+<tr>
+<td>LinkedList是否允许数据重复</td>
+<td>允许</td>
+</tr>
+<tr>
+<td>LinkedList是否有序</td>
+<td>有序</td>
+</tr>
+<tr>
+<td>LinkedList是否线程安全</td>
+<td>非线程安全</td>
+</tr>
+</tbody>
+</table>
+<h4 id="添加元素"><a href="#添加元素" class="headerlink" title="添加元素"></a>添加元素</h4><p>先来看下LinkedList是怎么添加元素的，操作如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">1 public static void main(String[] args)</div><div class="line">2 &#123;</div><div class="line">3     List&lt;String&gt; list = new LinkedList&lt;String&gt;();</div><div class="line">4     list.add("111");</div><div class="line">5     list.add("222");</div><div class="line">6 &#125;</div></pre></td></tr></table></figure>
+<p>逐行分析main函数中的三行代码是如何执行的，首先是第3行，看一下LinkedList的源码：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"> 1 public class LinkedList&lt;E&gt;</div><div class="line"> 2     extends AbstractSequentialList&lt;E&gt;</div><div class="line"> 3     implements List&lt;E&gt;, Deque&lt;E&gt;, Cloneable, java.io.Serializable</div><div class="line"> 4 &#123;</div><div class="line"> 5     private transient Entry&lt;E&gt; header = new Entry&lt;E&gt;(null, null, null);</div><div class="line"> 6     private transient int size = 0;</div><div class="line"> 7 </div><div class="line"> 8     /**</div><div class="line"> 9      * Constructs an empty list.</div><div class="line">10      */</div><div class="line">11     public LinkedList() &#123;</div><div class="line">12         header.next = header.previous = header;</div><div class="line">13     &#125;</div><div class="line">14     ...</div><div class="line">15 &#125;</div></pre></td></tr></table></figure>
+<p>看到，new了一个Entry出来名为header，Entry里面的previous、element、next都为null，执行构造函数的时候，将previous和next的值都设置为header的引用地址，还是用画图的方式表示。32位JDK的字长为4个字节，而目前64位的JDK一般采用的也是4字长，所以就以4个字长为单位。header引用地址的字长就是4个字节，假设是0x00000000，那么执行完”List list = new LinkedList()”之后可以这么表示：</p>
+<p><img src="http://ool03ljas.bkt.clouddn.com/LinkCreat.png" alt="enter description here"><br>看下第4行的add都实现了什么：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">1 public boolean add(E e) &#123;</div><div class="line">2 addBefore(e, header);</div><div class="line">3     return true;</div><div class="line">4 &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">1 private Entry&lt;E&gt; addBefore(E e, Entry&lt;E&gt; entry) &#123;</div><div class="line">2 Entry&lt;E&gt; newEntry = new Entry&lt;E&gt;(e, entry, entry.previous);</div><div class="line">3 newEntry.previous.next = newEntry;</div><div class="line">4 newEntry.next.previous = newEntry;</div><div class="line">5 size++;</div><div class="line">6 modCount++;</div><div class="line">7 return newEntry;</div><div class="line">8 &#125;</div></pre></td></tr></table></figure>
+<p>第2行new了一个Entry出来，可能不太好理解，根据Entry的构造函数，我把这句话”翻译”一下，可能就好理解了：</p>
+<p>1、newEntry.element = e;</p>
+<p>2、newEntry.next = header.next;</p>
+<p>3、newEntry.previous = header.previous;</p>
+<p>header.next和header.previous上图中已经看到了，都是0x00000000，那么假设new出来的这个Entry的地址是0x00000001，继续画图表示：</p>
+<p><img src="http://ool03ljas.bkt.clouddn.com/LinkCreat2.png" alt="enter description here"><br>一共五步，每一步的操作步骤都用数字表示出来了：</p>
+<p>1、新的entry的element赋值为111;</p>
+<p>2、新的entry的next是header的next，header的next是0x00000000，所以新的entry的next即0x00000000;</p>
+<p>3、新的entry的previous是header的previous，header的previous是0x00000000，所以新的entry的next即0x00000000;</p>
+<p>4、”newEntry.previous.next = newEntry”，首先是newEntry的previous，由于newEntry的previous为0x00000000，所以newEntry.previous表示的是header，header的next为newEntry，即header的next为0x00000001;</p>
+<p>5、”newEntry.next.previous = newEntry”，和4一样，把header的previous设置为0x00000001;</p>
+<p>为什么要这么做？还记得双向链表的两个特点吗，一是任意节点都可以向前和向后寻址，二是整个链表头的previous表示的是链表的尾Entry，链表尾的next表示的是链表的头Entry。现在链表头就是0x00000000这个Entry，链表尾就是0x00000001，可以自己看图观察、思考一下是否符合这两个条件。</p>
+<p>最后看一下add了一个字符串”222”做了什么，假设新new出来的Entry的地址是0x00000002，画图表示：</p>
+<p><img src="http://ool03ljas.bkt.clouddn.com/linkCreat3.png" alt="enter description here"></p>
+<p>还是执行的那5步，图中每一步都标注出来了，只要想清楚previous、next各自表示的是哪个节点就不会出问题了。</p>
+<p>至此，往一个LinkedList里面添加一个字符串”111”和一个字符串”222”就完成了。从这张图中应该理解双向链表比较容易：</p>
+<p>1、中间的那个Entry，previous的值为0x00000000，即header；next的值为0x00000002，即tail，这就是任意一个Entry既可以向前查找Entry，也可以向后查找Entry</p>
+<p>2、头Entry的previous的值为0x00000002，即tail，这就是双向链表中头Entry的previous指向的是尾Entry</p>
+<p>3、尾Entry的next的值为0x00000000，即header，这就是双向链表中尾Entry的next指向的是头Entry</p>
+<h4 id="查看元素"><a href="#查看元素" class="headerlink" title="查看元素"></a>查看元素</h4><p>看下LinkedList的get（）方法：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public E get(int index) &#123;</div><div class="line">    return entry(index).element;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"> 1 private Entry&lt;E&gt; entry(int index) &#123;</div><div class="line"> 2     if (index &lt; 0 || index &gt;= size)</div><div class="line"> 3         throw new IndexOutOfBoundsException("Index: "+index+</div><div class="line"> 4                                             ", Size: "+size);</div><div class="line"> 5     Entry&lt;E&gt; e = header;</div><div class="line"> 6     if (index &lt; (size &gt;&gt; 1)) &#123;</div><div class="line"> 7         for (int i = 0; i &lt;= index; i++)</div><div class="line"> 8             e = e.next;</div><div class="line"> 9     &#125; else &#123;</div><div class="line">10         for (int i = size; i &gt; index; i--)</div><div class="line">11             e = e.previous;</div><div class="line">12     &#125;</div><div class="line">13     return e;</div><div class="line">14 &#125;</div></pre></td></tr></table></figure>
+<p>这段代码就体现出了双向链表的好处了。双向链表增加了一点点的空间消耗（每个Entry里面还要维护它的前置Entry的引用），同时也增加了一定的编程复杂度，却大大提升了效率。</p>
+<p>由于LinkedList是双向链表，所以LinkedList既可以向前查找，也可以向后查找，第6行~第12行的作用就是：<strong>当index小于数组大小的一半的时候（size &gt;&gt; 1表示size / 2，使用移位运算提升代码运行效率），向后查找；否则，向前查找</strong>。</p>
+<p>这样，在我的数据结构里面有10000个元素，刚巧查找的又是第10000个元素的时候，就不需要从头遍历10000次了，向后遍历即可，一次就能找到我要的元素。</p>
+<h4 id="删除元素"><a href="#删除元素" class="headerlink" title="删除元素"></a>删除元素</h4><p>看完了添加元素，我们看一下如何删除一个元素。和ArrayList一样，LinkedList支持按元素删除和按下标删除，前者会删除从头开始匹配的第一个元素。用按下标删除举个例子好了，比方说有这么一段代码：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">1 public static void main(String[] args)</div><div class="line">2 &#123;</div><div class="line">3     List&lt;String&gt; list = new LinkedList&lt;String&gt;();</div><div class="line">4     list.add("111");</div><div class="line">5     list.add("222");</div><div class="line">6     list.remove(0);</div><div class="line">7 &#125;</div></pre></td></tr></table></figure>
+<p>也就是我想删除”111”这个元素。看一下第6行是如何执行的：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">1 public E remove(int index) &#123;</div><div class="line">2     return remove(entry(index));</div><div class="line">3 &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"> 1 private E remove(Entry&lt;E&gt; e) &#123;</div><div class="line"> 2 if (e == header)</div><div class="line"> 3     throw new NoSuchElementException();</div><div class="line"> 4 </div><div class="line"> 5         E result = e.element;</div><div class="line"> 6 e.previous.next = e.next;</div><div class="line"> 7 e.next.previous = e.previous;</div><div class="line"> 8        e.next = e.previous = null;</div><div class="line"> 9        e.element = null;</div><div class="line">10 size--;</div><div class="line">11 modCount++;</div><div class="line">12        return result;</div><div class="line">13 &#125;</div></pre></td></tr></table></figure>
+<p>当然，首先是找到元素在哪里，这和get是一样的。接着，用画图的方式来说明比较简单：<br><img src="http://ool03ljas.bkt.clouddn.com/linkDelte.png" alt="enter description here"><br>比较简单，只要找对引用地址就好了，每一步的操作也都详细标注在图上了。</p>
+<p>这里我提一点，第3步、第4步、第5步将待删除的Entry的previous、element、next都设置为了null，这三步的作用是让虚拟机可以回收这个Entry。</p>
+<p>但是，这个问题我稍微扩展深入一点：按照Java虚拟机HotSpot采用的垃圾回收检测算法—-根节点搜索算法来说，即使previous、element、next不设置为null也是可以回收这个Entry的，因为此时这个Entry已经没有任何地方会指向它了，tail的previous与header的next都已经变掉了，所以这块Entry会被当做”垃圾”对待。之所以还要将previous、element、next设置为null，我认为可能是为了兼容另外一种垃圾回收检测算法—-引用计数法，这种垃圾回收检测算法，只要对象之间存在相互引用，那么这块内存就不会被当作”垃圾”对待。</p>
+<h4 id="插入元素"><a href="#插入元素" class="headerlink" title="插入元素"></a>插入元素</h4><p>看下add的代码：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public void add(int index, E element) &#123;</div><div class="line">    addBefore(element, (index==size ? header : entry(index)));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">private Entry&lt;E&gt; addBefore(E e, Entry&lt;E&gt; entry) &#123;</div><div class="line">Entry&lt;E&gt; newEntry = new Entry&lt;E&gt;(e, entry, entry.previous);</div><div class="line">newEntry.previous.next = newEntry;</div><div class="line">newEntry.next.previous = newEntry;</div><div class="line">size++;</div><div class="line">modCount++;</div><div class="line">return newEntry;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="LinkedList和ArrayList的对比"><a href="#LinkedList和ArrayList的对比" class="headerlink" title="LinkedList和ArrayList的对比"></a>LinkedList和ArrayList的对比</h3><p>老生常谈的问题了，这里我尝试以自己的理解尽量说清楚这个问题，顺便在这里就把LinkedList的优缺点也给讲了。</p>
+<p>1、顺序插入速度ArrayList会比较快，因为ArrayList是基于数组实现的，数组是事先new好的，只要往指定位置塞一个数据就好了；LinkedList则不同，每次顺序插入的时候LinkedList将new一个对象出来，如果对象比较大，那么new的时间势必会长一点，再加上一些引用赋值的操作，所以顺序插入LinkedList必然慢于ArrayList</p>
+<p>2、基于上一点，因为LinkedList里面不仅维护了待插入的元素，还维护了Entry的前置Entry和后继Entry，如果一个LinkedList中的Entry非常多，那么LinkedList将比ArrayList更耗费一些内存</p>
+<p>3、数据遍历的速度，看最后一部分，这里就不细讲了，结论是：使用各自遍历效率最高的方式，ArrayList的遍历效率会比LinkedList的遍历效率高一些</p>
+<p>4、有些说法认为LinkedList做插入和删除更快，这种说法其实是不准确的：</p>
+<p>（1）LinkedList做插入、删除的时候，慢在寻址，快在只需要改变前后Entry的引用地址</p>
+<p>（2）ArrayList做插入、删除的时候，慢在数组元素的批量copy，快在寻址</p>
+<p><strong>所以，如果待插入、删除的元素是在数据结构的前半段尤其是非常靠前的位置的时候，LinkedList的效率将大大快过ArrayList，因为ArrayList将批量copy大量的元素；越往后，对于LinkedList来说，因为它是双向链表，所以在第2个元素后面插入一个数据和在倒数第2个元素后面插入一个元素在效率上基本没有差别，但是ArrayList由于要批量copy的元素越来越少，操作速度必然追上乃至超过LinkedList。</strong><br>从这个分析看出，如果你十分确定你插入、删除的元素是在前半段，那么就使用LinkedList；如果你十分确定你删除、删除的元素在比较靠后的位置，那么可以考虑使用ArrayList。如果你不能确定你要做的插入、删除是在哪儿呢？那还是建议你使用LinkedList吧，因为一来LinkedList整体插入、删除的执行效率比较稳定，没有ArrayList这种越往后越快的情况；二来插入元素的时候，弄得不好ArrayList就要进行一次扩容，记住，ArrayList底层数组扩容是一个既消耗时间又消耗空间的操作</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/18/图解集合（一）之ArrayList/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -678,7 +921,7 @@ INFO Deploy done: git</code>　　<br>　　部署好了后，在浏览器地址
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

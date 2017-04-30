@@ -87,17 +87,19 @@
 
 
 
-<meta name="description" content="最近用了Android7.0手机打开做的项目，发现之前做的PopupWindow弹出位置都在屏幕顶部弹出，翻开代码， 1pop.showAsDropDown(viewMark); PopupWindow在viewMark下方弹出，那就是此方法在7.0位置失效了。接着换成了另外一个方法showAtLocation；代码如下 1234int[] location = new int[2]; viewM">
+<meta name="description" content="当我们通过点击应用程序图标来启动Activity，或者通过Activity内部调用startActivity接口来启动新的Activity，都要借助于应用程序框架层的ActivityManagerService服务进程。ActivityManagerService是一个非常重要的接口，它不但负责启动Activity和Service，还负责管理Activity和Service。Android应用程序">
 <meta name="keywords">
 <meta property="og:type" content="article">
-<meta property="og:title" content="解决PopupWindow在android7.0弹出位置错误问题">
-<meta property="og:url" content="http://yoursite.com/2017/04/29/解决PopupWindow在android7-0弹出位置错误问题/index.html">
+<meta property="og:title" content="Acivity的启动过程">
+<meta property="og:url" content="http://yoursite.com/2017/04/30/Acivity的启动过程/index.html">
 <meta property="og:site_name" content="HERO | Z">
-<meta property="og:description" content="最近用了Android7.0手机打开做的项目，发现之前做的PopupWindow弹出位置都在屏幕顶部弹出，翻开代码， 1pop.showAsDropDown(viewMark); PopupWindow在viewMark下方弹出，那就是此方法在7.0位置失效了。接着换成了另外一个方法showAtLocation；代码如下 1234int[] location = new int[2]; viewM">
-<meta property="og:updated_time" content="2017-04-29T13:57:14.075Z">
+<meta property="og:description" content="当我们通过点击应用程序图标来启动Activity，或者通过Activity内部调用startActivity接口来启动新的Activity，都要借助于应用程序框架层的ActivityManagerService服务进程。ActivityManagerService是一个非常重要的接口，它不但负责启动Activity和Service，还负责管理Activity和Service。Android应用程序">
+<meta property="og:image" content="http://ool03ljas.bkt.clouddn.com/launch.jpg">
+<meta property="og:updated_time" content="2017-04-30T09:10:10.065Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="解决PopupWindow在android7.0弹出位置错误问题">
-<meta name="twitter:description" content="最近用了Android7.0手机打开做的项目，发现之前做的PopupWindow弹出位置都在屏幕顶部弹出，翻开代码， 1pop.showAsDropDown(viewMark); PopupWindow在viewMark下方弹出，那就是此方法在7.0位置失效了。接着换成了另外一个方法showAtLocation；代码如下 1234int[] location = new int[2]; viewM">
+<meta name="twitter:title" content="Acivity的启动过程">
+<meta name="twitter:description" content="当我们通过点击应用程序图标来启动Activity，或者通过Activity内部调用startActivity接口来启动新的Activity，都要借助于应用程序框架层的ActivityManagerService服务进程。ActivityManagerService是一个非常重要的接口，它不但负责启动Activity和Service，还负责管理Activity和Service。Android应用程序">
+<meta name="twitter:image" content="http://ool03ljas.bkt.clouddn.com/launch.jpg">
 
 
 
@@ -125,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/04/29/解决PopupWindow在android7-0弹出位置错误问题/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/04/30/Acivity的启动过程/"/>
 
 
 
 
 
-  <title> 解决PopupWindow在android7.0弹出位置错误问题 | HERO | Z </title>
+  <title> Acivity的启动过程 | HERO | Z </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -260,7 +262,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/29/解决PopupWindow在android7-0弹出位置错误问题/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/30/Acivity的启动过程/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="HERO | Z">
@@ -281,7 +283,7 @@
             
             
               
-                解决PopupWindow在android7.0弹出位置错误问题
+                Acivity的启动过程
               
             
           </h1>
@@ -296,8 +298,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-29T21:52:16+08:00">
-                2017-04-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-30T17:08:03+08:00">
+                2017-04-30
               </time>
             
 
@@ -354,13 +356,14 @@
       
 
       
-        <p>最近用了Android7.0手机打开做的项目，发现之前做的PopupWindow弹出位置都在屏幕顶部弹出，翻开代码，</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pop.showAsDropDown(viewMark);</div></pre></td></tr></table></figure>
-<p>PopupWindow在viewMark下方弹出，那就是此方法在7.0位置失效了。接着换成了另外一个方法showAtLocation；代码如下</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">int[] location = new int[2]; </div><div class="line">viewMark.getLocationOnScreen(location);</div><div class="line">int y = location[1] ;</div><div class="line">pop.showAtLocation(viewMark, Gravity.NO_GRAVITY,0,y);</div></pre></td></tr></table></figure>
-<p>showAtLocation的四个参数最重要的就是第三，第四。代表偏移量，集体参数可以自己查询。这里不多介绍。编译运行，7.0上完美解决。duang……….，用7.0以下手机运行出现了同样的问题，看样子还要分开处理。完整代码如下：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">if(android.os.Build.VERSION.SDK_INT&gt;android.os.Build.VERSION_CODES.M) &#123;</div><div class="line"> int[] location = new int[2];    viewMark.getLocationOnScreen(location);</div><div class="line">int y = location[1] ;</div><div class="line">pop.showAtLocation(viewMark, Gravity.NO_GRAVITY,0,y);</div><div class="line">&#125;else &#123;</div><div class="line">  pop.showAsDropDown(viewMark);</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<p>好了，这个问题就解决了。</p>
+        <p>当我们通过点击应用程序图标来启动Activity，或者通过Activity内部调用startActivity接口来启动新的Activity，都要借助于应用程序框架层的ActivityManagerService服务进程。ActivityManagerService是一个非常重要的接口，它不但负责启动Activity和Service，还负责管理Activity和Service。<br>Android应用程序框架层中的ActivityManagerService启动Activity的过程大致如下图所示：<br><img src="http://ool03ljas.bkt.clouddn.com/launch.jpg" alt="enter description here"></p>
+<p>在这个图中，ActivityManagerService和ActivityStack位于同一个进程中，而ApplicationThread和ActivityThread位于另一个进程中。其中，ActivityManagerService是负责管理Activity的生命周期的，ActivityManagerService还借助ActivityStack是来把所有的Activity按照后进先出的顺序放在一个堆栈中；对于每一个应用程序来说，都有一个ActivityThread来表示应用程序的主进程，而每一个ActivityThread都包含有一个ApplicationThread实例，它是一个Binder对象，负责和其它进程进行通信。<br>下面简要介绍一下启动的过程：</p>
+<p>Step 1. 无论是通过Launcher来启动Activity，还是通过Activity内部调用startActivity接口来启动新的Activity，都通过Binder进程间通信进入到ActivityManagerService进程中，并且调用ActivityManagerService.startActivity接口；</p>
+<p>Step 2. ActivityManagerService调用ActivityStack.startActivityMayWait来做准备要启动的Activity的相关信息；</p>
+<p>Step 3. ActivityStack通知ApplicationThread要进行Activity启动调度了，这里的ApplicationThread代表的是调用ActivityManagerService.startActivity接口的进程，对于通过点击应用程序图标的情景来说，这个进程就是Launcher了，而对于通过在Activity内部调用startActivity的情景来说，这个进程就是这个Activity所在的进程了；</p>
+<p>Step 5. 对于通过点击应用程序图标来启动Activity的情景来说，ActivityManagerService在这一步中，会调用startProcessLocked来创建一个新的进程，而对于通过在Activity内部调用startActivity来启动新的Activity来说，这一步是不需要执行的，因为新的Activity就在原来的Activity所在的进程中进行启动；</p>
+<p>Step 6. ActivityManagerServic调用ApplicationThread.scheduleLaunchActivity接口，通知相应的进程执行启动Activity的操作；</p>
+<p>Step 7. ApplicationThread把这个启动Activity的操作转发给ActivityThread，ActivityThread通过ClassLoader导入相应的Activity类，然后把它启动起来。</p>
 
       
     </div>
@@ -397,18 +400,14 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/04/29/ListView嵌套出现子Listview显示不全问题解决/" rel="next" title=" ListView嵌套出现子Listview显示不全问题解决">
-                <i class="fa fa-chevron-left"></i>  ListView嵌套出现子Listview显示不全问题解决
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/04/29/解决图片宽度全屏高度按比例自适应填充/" rel="prev" title="解决图片宽度全屏高度按比例自适应填充">
-                解决图片宽度全屏高度按比例自适应填充 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/04/30/fragment内存重启出现的几种问题解决/" rel="prev" title="fragment内存重启出现的几种问题解决">
+                fragment内存重启出现的几种问题解决 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
