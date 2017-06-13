@@ -359,7 +359,22 @@
       
         
           
-            
+            <p>网络框架是Android项目最重要的部分之一，没有网络框架，那我们的应用就是个“傻瓜”了，目前开源的网络框架有很多，比如Google开发的Volley，loopj的Android Async Http，Square开源的OkHttp或者Retrofit等。不过我觉得retrofit是最好用的一个，简洁的代码，巧妙的设计，用起来会有一种魔鬼的步伐般摩擦的感觉。因为刚从Retrofit1.9升级到了Rerofit2.0，所以，这里说的都是基于2.0的。</p>
+<h2 id="Retrofit是什么"><a href="#Retrofit是什么" class="headerlink" title="Retrofit是什么"></a>Retrofit是什么</h2><p>简单的说它是一个基于OkHttp的RESTFUL Api请求工具，从功能上来说和Google的Volley功能上很相似，但是使用上很不相似。</p>
+<p>Volley使用上更加原始而且符合使用者的直觉，当App要发送一个Http请求时，你需要先创建一个Request对象，指定这个Request用的是GET、POST或其他方法，一个api 地址，一个处理response的回调，如果是一个POST请求，那么你还需要给这个Request对象设置一个body，有时候你还需要自定义添加Header什么的，然后将这个Request对象添加到RequestQueue中，接下去检查Cache以及发送Http请求的事情，Volley会帮你处理。如果一个App中api不同的api请求很多，这样代码就会很难看。</p>
+<p>而Retrofit可以让你简单到调用一个Java方法的方式去请求一个api，这样App中的代码就会很简洁方便阅读</p>
+<h2 id="Retrofit怎么使用"><a href="#Retrofit怎么使用" class="headerlink" title="Retrofit怎么使用"></a>Retrofit怎么使用</h2><p>比如，我们要请求如下一个数据接口</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">https:<span class="comment">//www.xxx.com/api/area/&#123;id&#125;</span></div></pre></td></tr></table></figure>
+<p>首先，你需要创建一个Retrofit实例，并且制定api的域名</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public static final String API_URL = "https://www.xxx.com";</div><div class="line"></div><div class="line">Retrofit retrofit = new Retrofit.Builder()</div><div class="line">    .baseUrl(API_URL)</div><div class="line">    .addConverterFactory(GsonConverterFactory.create())</div><div class="line">    .build();</div></pre></td></tr></table></figure>
+<p>其次，你要根据api新建一个Java接口，用Java注解来描述这个api</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public interface DataApi &#123;</div><div class="line">    @GET(<span class="string">"/api/area/&#123;id&#125; "</span>)</div><div class="line">    Call&lt;Area&gt; getArea(@Path(<span class="string">"id"</span>) String id)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>再用retrofit对象创建一个DataApi对象</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">DataApi api = retrofit.create(DataApi.class);</div><div class="line"></div><div class="line">Call&lt;Area&gt; call = api.getArea("121");</div></pre></td></tr></table></figure>
+<p>最后你就可以用这个call对象获得数据了，enqueue方法是异步发送http请求的，如果你想用同步的方式发送可以使用execute()方法，call对象还提供cancel()、isCancel()等方法获取这个Http请求的状态</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">// 请求数据，并且处理response</div><div class="line">call.enqueue(new Callback&lt;Area&gt;() &#123;</div><div class="line">    @Override</div><div class="line">    public void onResponse(Response&lt;Area&gt; area) &#123;</div><div class="line">        System.out.println("name： " + area.getName());</div><div class="line">    &#125;</div><div class="line">    @Override</div><div class="line">    public void onFailure(Throwable t) &#123;</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>Retrofit只要创建一个接口来描述Http请求，然后可以让我们可以像调用Java方法一样请求一个Api，是不是觉得很神奇，很不可思议！</p>
+<h2 id="Retrofit原理"><a href="#Retrofit原理" class="headerlink" title="Retrofit原理"></a>Retrofit原理</h2>
           
         
       
