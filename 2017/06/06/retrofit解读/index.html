@@ -94,7 +94,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/06/06/retrofit解读/index.html">
 <meta property="og:site_name" content="HERO | Z">
 <meta property="og:description" content="网络框架是Android项目最重要的部分之一，没有网络框架，那我们的应用就是个“傻瓜”了，目前开源的网络框架有很多，比如Google开发的Volley，loopj的Android Async Http，Square开源的OkHttp或者Retrofit等。不过我觉得retrofit是最好用的一个，简洁的代码，巧妙的设计，用起来会有一种魔鬼的步伐般摩擦的感觉。因为刚从Retrofit1.9升级到了R">
-<meta property="og:updated_time" content="2017-06-13T15:26:01.816Z">
+<meta property="og:updated_time" content="2017-06-14T01:25:34.754Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="retrofit解读">
 <meta name="twitter:description" content="网络框架是Android项目最重要的部分之一，没有网络框架，那我们的应用就是个“傻瓜”了，目前开源的网络框架有很多，比如Google开发的Volley，loopj的Android Async Http，Square开源的OkHttp或者Retrofit等。不过我觉得retrofit是最好用的一个，简洁的代码，巧妙的设计，用起来会有一种魔鬼的步伐般摩擦的感觉。因为刚从Retrofit1.9升级到了R">
@@ -369,7 +369,9 @@
 <p>最后你就可以用这个call对象获得数据了，enqueue方法是异步发送http请求的，如果你想用同步的方式发送可以使用execute()方法，call对象还提供cancel()、isCancel()等方法获取这个Http请求的状态</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">// 请求数据，并且处理response</div><div class="line">call.enqueue(new Callback&lt;Area&gt;() &#123;</div><div class="line">    @Override</div><div class="line">    public void onResponse(Response&lt;Area&gt; area) &#123;</div><div class="line">        System.out.println("name： " + area.getName());</div><div class="line">    &#125;</div><div class="line">    @Override</div><div class="line">    public void onFailure(Throwable t) &#123;</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <p>Retrofit只要创建一个接口来描述Http请求，然后可以让我们可以像调用Java方法一样请求一个Api，是不是觉得很神奇，很不可思议！</p>
-<h2 id="Retrofit原理"><a href="#Retrofit原理" class="headerlink" title="Retrofit原理"></a>Retrofit原理</h2>
+<h2 id="Retrofit原理"><a href="#Retrofit原理" class="headerlink" title="Retrofit原理"></a>Retrofit原理</h2><p>从使用方法，我们看出Retrofit充当了一个适配器的角色（Adapter），<strong>将一个Java接口翻译成一个Http请求，然后用OkHttp去发送这个请求</strong></p>
+<p>Volley描述一个HTTP请求是需要创建一个Request对象，而执行这个请求呢，就是把这个请求对象放到一个队列中，在网络线程中用HttpUrlConnection去请求，那么问题来了，retrofit是怎么做到的，答案就是：<br><strong>java的动态代理</strong></p>
+
       
     </div>
 
