@@ -94,7 +94,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/06/06/retrofit解读/index.html">
 <meta property="og:site_name" content="HERO | Z">
 <meta property="og:description" content="网络框架是Android项目最重要的部分之一，没有网络框架，那我们的应用就是个“傻瓜”了，目前开源的网络框架有很多，比如Google开发的Volley，loopj的Android Async Http，Square开源的OkHttp或者Retrofit等。不过我觉得retrofit是最好用的一个，简洁的代码，巧妙的设计，用起来会有一种魔鬼的步伐般摩擦的感觉。因为刚从Retrofit1.9升级到了R">
-<meta property="og:updated_time" content="2017-06-14T01:25:34.754Z">
+<meta property="og:updated_time" content="2017-06-27T14:40:25.104Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="retrofit解读">
 <meta name="twitter:description" content="网络框架是Android项目最重要的部分之一，没有网络框架，那我们的应用就是个“傻瓜”了，目前开源的网络框架有很多，比如Google开发的Volley，loopj的Android Async Http，Square开源的OkHttp或者Retrofit等。不过我觉得retrofit是最好用的一个，简洁的代码，巧妙的设计，用起来会有一种魔鬼的步伐般摩擦的感觉。因为刚从Retrofit1.9升级到了R">
@@ -370,7 +370,49 @@
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">// 请求数据，并且处理response</div><div class="line">call.enqueue(new Callback&lt;Area&gt;() &#123;</div><div class="line">    @Override</div><div class="line">    public void onResponse(Response&lt;Area&gt; area) &#123;</div><div class="line">        System.out.println("name： " + area.getName());</div><div class="line">    &#125;</div><div class="line">    @Override</div><div class="line">    public void onFailure(Throwable t) &#123;</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <p>Retrofit只要创建一个接口来描述Http请求，然后可以让我们可以像调用Java方法一样请求一个Api，是不是觉得很神奇，很不可思议！</p>
 <h2 id="Retrofit原理"><a href="#Retrofit原理" class="headerlink" title="Retrofit原理"></a>Retrofit原理</h2><p>从使用方法，我们看出Retrofit充当了一个适配器的角色（Adapter），<strong>将一个Java接口翻译成一个Http请求，然后用OkHttp去发送这个请求</strong></p>
-<p>Volley描述一个HTTP请求是需要创建一个Request对象，而执行这个请求呢，就是把这个请求对象放到一个队列中，在网络线程中用HttpUrlConnection去请求，那么问题来了，retrofit是怎么做到的，答案就是：<br><strong>java的动态代理</strong></p>
+<p>Volley描述一个HTTP请求是需要创建一个Request对象，而执行这个请求呢，就是把这个请求对象放到一个队列中，在网络线程中用HttpUrlConnection去请求，那么问题来了，retrofit是怎么做到的，答案就是：<br><strong>java的动态代理</strong><br>先来看这句代码</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">DataApi api = retrofit.create(DataApi.class);</div></pre></td></tr></table></figure>
+<p>啥！！！create传入一个DataApi返回的是DataApi，什么鬼，看看Create的源码，</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">public &lt;T&gt; T create(final Class&lt;T&gt; service) &#123;</div><div class="line">   Utils.validateServiceInterface(service);</div><div class="line">   if (validateEagerly) &#123;</div><div class="line">     eagerlyValidateMethods(service);</div><div class="line">   &#125;</div><div class="line">   return (T) Proxy.newProxyInstance(service.getClassLoader(), new Class&lt;?&gt;[] &#123; service &#125;,</div><div class="line">       new InvocationHandler() &#123;</div><div class="line">         private final Platform platform = Platform.get();</div><div class="line"></div><div class="line">         @Override public Object invoke(Object proxy, Method method, Object[] args)</div><div class="line">             throws Throwable &#123;</div><div class="line">           // If the method is a method from Object then defer to normal invocation.</div><div class="line">           if (method.getDeclaringClass() == Object.class) &#123;</div><div class="line">             return method.invoke(this, args);</div><div class="line">           &#125;</div><div class="line">           if (platform.isDefaultMethod(method)) &#123;</div><div class="line">             return platform.invokeDefaultMethod(method, service, proxy, args);</div><div class="line">           &#125;</div><div class="line">           ServiceMethod&lt;Object, Object&gt; serviceMethod =</div><div class="line">               (ServiceMethod&lt;Object, Object&gt;) loadServiceMethod(method);</div><div class="line">           OkHttpCall&lt;Object&gt; okHttpCall = new OkHttpCall&lt;&gt;(serviceMethod, args);</div><div class="line">           return serviceMethod.callAdapter.adapt(okHttpCall);</div><div class="line">         &#125;</div><div class="line">       &#125;);</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>可以看到，create返回的是一个动态代理对象，好了，这里也解释一下动态代理<br><strong>动态代理</strong><br>Java动态代理就是给了程序员一种可能：当你要调用某个Class的方法前或后，插入你想要执行的代码</p>
+<p><strong>为什么要用动态代理</strong><br>看下上面的这句代码：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Call&lt;Area&gt; call = api.getArea("121");</div></pre></td></tr></table></figure>
+<p>上面api对象其实是一个动态代理对象，并不是一个真正的AreaApi接口的implements产生的对象，当api对象调用getArea方法时会被动态代理拦截，然后调用Proxy.newProxyInstance方法中的InvocationHandler对象，它的invoke方法会传入3个参数：</p>
+<ol>
+<li>Object proxy: 代理对象，不关心这个</li>
+<li>Method method：调用的方法，就是getArea方法</li>
+<li>Object… args：方法的参数，就是”121”</li>
+</ol>
+<p>而Retrofit关心的就是method和它的参数args，接下去Retrofit就会用Java反射获取到getAuthor方法的注解信息，配合args参数，创建一个ServiceMethod对象</p>
+<p>ServiceMethod就像是一个中央处理器，传入Retrofit对象和Method对象，调用各个接口和解析器，最终生成一个Request，包含api 的域名、path、http请求方法、请求头、是否有body、是否是multipart等等。最后返回一个Call对象，Retrofit2中Call接口的默认实现是OkHttpCall，它默认使用OkHttp3作为底层http请求client</p>
+<p>使用Java动态代理的目的就要拦截被调用的Java方法，然后解析这个Java方法的注解，最后生成Request由OkHttp发送</p>
+<h2 id="Retrofit的源码分析"><a href="#Retrofit的源码分析" class="headerlink" title="Retrofit的源码分析"></a>Retrofit的源码分析</h2><p>想要弄清楚Retrofit的细节，先来看一下Retrofit源码的组成：</p>
+<ul>
+<li><p>一个retrofit2.http包，里面全部是定义HTTP请求的Java注解，比如GET、POST、PUT、DELETE、Headers、Path、Query等等</p>
+</li>
+<li><p>余下的retrofit2包中几个类和接口就是全部retrofit的代码了，代码真的很少，很简单，因为retrofit把网络请求这部分功能全部交给了OkHttp了<br>Retrofit的设计非常插件化而且轻量级，真的是非常高内聚而且低耦合，这个和它的接口设计有关。Retrofit中定义了4个接口：<br><strong>Callback<t></t></strong><br>这个接口就是retrofit请求数据返回的接口，只有两个方法</p>
+</li>
+<li><p>void onResponse(Response<t> response);</t></p>
+</li>
+<li>void onFailure(Throwable t);<br><strong>Converter<f, t=""></f,></strong><br>这个接口主要的作用就是将HTTP返回的数据解析成Java对象，主要有Xml、Gson、protobuf等等，你可以在创建Retrofit对象时添加你需要使用的Converter实现（看上面创建Retrofit对象的代码）<br><strong>Call<t></t></strong><br>这个接口主要的作用就是发送一个HTTP请求，Retrofit默认的实现是OkHttpCall<t>，你可以根据实际情况实现你自己的Call类，这个设计和Volley的HttpStack接口设计的思想非常相似，子类可以实现基于HttpClient或HttpUrlConnetction的HTTP请求工具，这种设计非常的插件化，而且灵活<br><strong>CallAdapter<t></t></strong><br>上面说到过，CallAdapter中属性只有responseType一个，还有一个<r> T adapt(Call<r> call)方法，这个接口的实现类也只有一个，DefaultCallAdapter。这个方法的主要作用就是将Call对象转换成另一个对象，可能是为了支持RxJava才设计这个类的吧<h2 id="Retrofit的运行过程"><a href="#Retrofit的运行过程" class="headerlink" title="Retrofit的运行过程"></a>Retrofit的运行过程</h2></r></r></t></li>
+</ul>
+<p>上面讲到DataApi api = retrofit.create(DataApi.class);代码返回了一个动态代理对象，而执行Call<area> call = api.getArea(“121”);代码时返回了一个OkHttpCall对象，拿到这个Call对象才能执行HTTP请求</p>
+<p>上面api对象其实是一个动态代理对象，并不是一个真正的DataApi接口的implements产生的对象，当api对象调用getArea方法时会被动态代理拦截，然后调用Proxy.newProxyInstance方法中的InvocationHandler对象， 创建一个ServiceMethod对象</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ServiceMethod serviceMethod = loadServiceMethod(method);</div><div class="line">OkHttpCall okHttpCall = new OkHttpCall&lt;&gt;(serviceMethod, args);</div><div class="line">return serviceMethod.callAdapter.adapt(okHttpCall);</div></pre></td></tr></table></figure>
+<h2 id="创建ServiceMethod"><a href="#创建ServiceMethod" class="headerlink" title="创建ServiceMethod"></a>创建ServiceMethod</h2><p>刚才说到，ServiceMethod就像是一个中央处理器，具体来看一下创建这个ServiceMethod的过程是怎么样的</p>
+<p>第一步，获取到上面说到的3个接口对象：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">callAdapter = createCallAdapter();</div><div class="line">responseType = callAdapter.responseType();</div><div class="line">responseConverter = createResponseConverter();</div></pre></td></tr></table></figure>
+<p>第二步，解析Method的注解，主要就是获取Http请求的方法，比如是GET还是POST还是其他形式，如果没有，程序就会报错，还会做一系列的检查，比如如果在方法上注解了@Multipart，但是Http请求方法是GET，同样也会报错。因此，在注解Java方法是需要严谨</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">for (Annotation annotation : methodAnnotations) &#123;</div><div class="line">    parseMethodAnnotation(annotation);</div><div class="line">&#125;</div><div class="line"></div><div class="line">if (httpMethod == null) &#123;</div><div class="line">   throw methodError("HTTP method annotation is required (e.g., @GET, @POST, etc.).");</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>第三步，比如上面api中带有一个参数{user}，这是一个占位符，而真实的参数值在Java方法中传入，那么Retrofit会使用一个ParameterHandler来进行替换：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">int parameterCount = parameterAnnotationsArray.length;</div><div class="line">parameterHandlers = new ParameterHandler&lt;?&gt;[parameterCount];</div></pre></td></tr></table></figure>
+<p>最后，ServiceMethod会做其他的检查，比如用了@FormUrlEncoded注解，那么方法参数中必须至少有一个@Field或@FieldMap</p>
+<h2 id="执行HTTP请求"><a href="#执行HTTP请求" class="headerlink" title="执行HTTP请求"></a>执行HTTP请求</h2><p>之前讲到，OkHttpCall是实现了Call接口的，并且是真正调用OkHttp3发送Http请求的类。OkHttp3发送一个Http请求需要一个Request对象，而这个Request对象就是从ServiceMethod的toRequest返回的</p>
+<p>总的来说，OkHttpCall就是调用ServiceMethod获得一个可以执行的Request对象，然后等到Http请求返回后，再将response body传入ServiceMethod中，ServiceMethod就可以调用Converter接口将response body转成一个Java对象</p>
+<p>结合上面说的就可以看出，ServiceMethod中几乎保存了一个api请求所有需要的数据，OkHttpCall需要从ServiceMethod中获得一个Request对象，然后得到response后，还需要传入ServiceMethod用Converter转换成Java对象</p>
+<p>你可能会觉得我只要发送一个HTTP请求，你要做这么多事情不会很“慢”吗？不会很浪费性能吗？</p>
+<p>我觉得，首先现在手机处理器主频非常高了，解析这个接口可能就花1ms可能更少的时间（我没有测试过），面对一个HTTP本来就需要几百ms，甚至几千ms来说不值得一提；而且Retrofit会对解析过的请求进行缓存，就在Map<method, servicemethod=""> serviceMethodCache = new LinkedHashMap&lt;&gt;();这个对象中</method,></p>
+<p>Retrofit非常巧妙的用注解来描述一个HTTP请求，将一个HTTP请求抽象成一个Java接口，然后用了Java动态代理的方式，动态的将这个接口的注解“翻译”成一个HTTP请求，最后再执行这个HTTP请求</p>
 
       
     </div>
@@ -535,7 +577,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Retrofit是什么"><span class="nav-number">1.</span> <span class="nav-text">Retrofit是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Retrofit怎么使用"><span class="nav-number">2.</span> <span class="nav-text">Retrofit怎么使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Retrofit原理"><span class="nav-number">3.</span> <span class="nav-text">Retrofit原理</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Retrofit是什么"><span class="nav-number">1.</span> <span class="nav-text">Retrofit是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Retrofit怎么使用"><span class="nav-number">2.</span> <span class="nav-text">Retrofit怎么使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Retrofit原理"><span class="nav-number">3.</span> <span class="nav-text">Retrofit原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Retrofit的源码分析"><span class="nav-number">4.</span> <span class="nav-text">Retrofit的源码分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Retrofit的运行过程"><span class="nav-number">5.</span> <span class="nav-text">Retrofit的运行过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建ServiceMethod"><span class="nav-number">6.</span> <span class="nav-text">创建ServiceMethod</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行HTTP请求"><span class="nav-number">7.</span> <span class="nav-text">执行HTTP请求</span></a></li></ol></div>
             
 
           </div>
